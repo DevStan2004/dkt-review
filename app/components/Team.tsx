@@ -42,7 +42,7 @@ const Team = (props: Props) => {
       const MAX_SCROLL_BOOST = 160;
 
       // How strongly scroll velocity affects the marquee.
-      const SCROLL_SENSITIVITY = 0.05;
+      const SCROLL_SENSITIVITY = 1;
 
       // How quickly the current speed catches
       // up with the target speed.
@@ -103,10 +103,7 @@ const Team = (props: Props) => {
       // CONTINUOUS MARQUEE
       // --------------------------------
 
-      const ticker = (
-        _time: number,
-        deltaTime: number,
-      ) => {
+      const ticker = (_time: number, deltaTime: number) => {
         if (!state.width) return;
 
         const delta = deltaTime / 1000;
@@ -116,10 +113,7 @@ const Team = (props: Props) => {
         // AFTER USER STOPS SCROLLING
         // --------------------------------
 
-        if (
-          performance.now() - state.lastScrollTime >
-          IDLE_DELAY
-        ) {
+        if (performance.now() - state.lastScrollTime > IDLE_DELAY) {
           state.targetSpeed = BASE_SPEED;
         }
 
@@ -127,36 +121,25 @@ const Team = (props: Props) => {
         // SMOOTH SPEED CHANGE
         // --------------------------------
 
-        state.speed +=
-          (state.targetSpeed - state.speed) *
-          SPEED_LERP;
+        state.speed += (state.targetSpeed - state.speed) * SPEED_LERP;
 
         // --------------------------------
         // MOVE MARQUEE
         // --------------------------------
 
-        state.x +=
-          state.direction *
-          state.speed *
-          delta;
+        state.x += state.direction * state.speed * delta;
 
         // --------------------------------
         // INFINITE LOOP
         // --------------------------------
 
         // Moving LEFT
-        if (
-          state.direction === -1 &&
-          state.x <= -state.width
-        ) {
+        if (state.direction === -1 && state.x <= -state.width) {
           state.x += state.width;
         }
 
         // Moving RIGHT
-        if (
-          state.direction === 1 &&
-          state.x >= 0
-        ) {
+        if (state.direction === 1 && state.x >= 0) {
           state.x -= state.width;
         }
 
@@ -197,13 +180,11 @@ const Team = (props: Props) => {
           // --------------------------------
 
           const scrollBoost = Math.min(
-            Math.abs(velocity) *
-              SCROLL_SENSITIVITY,
+            Math.abs(velocity) * SCROLL_SENSITIVITY,
             MAX_SCROLL_BOOST,
           );
 
-          state.targetSpeed =
-            BASE_SPEED + scrollBoost;
+          state.targetSpeed = BASE_SPEED + scrollBoost;
         },
       });
 
@@ -225,14 +206,7 @@ const Team = (props: Props) => {
   );
 
   return (
-    <GlobalContainer
-      id="medical-team"
-      className=""
-    >
-      {/* -------------------------------- */}
-      {/* HEADER */}
-      {/* -------------------------------- */}
-
+    <GlobalContainer id="medical-team" className="">
       <FlexContainer className="flex-col gap-5 lg:w-1/2">
         <LightBgComponent
           text="The Team"
@@ -254,23 +228,8 @@ const Team = (props: Props) => {
           </span>
         </p>
       </FlexContainer>
-
-      {/* -------------------------------- */}
-      {/* MARQUEE */}
-      {/* -------------------------------- */}
-
-      <div
-        ref={containerRef}
-        className="relative my-10 w-full overflow-hidden"
-      >
-        <div
-          ref={trackRef}
-          className="flex w-max items-center"
-        >
-          {/* -------------------------------- */}
-          {/* FIRST SET */}
-          {/* -------------------------------- */}
-
+      <div ref={containerRef} className="relative my-10 w-full overflow-hidden">
+        <div ref={trackRef} className="flex w-max items-center">
           <div
             ref={firstSetRef}
             className="flex w-max shrink-0 items-center gap-5 pr-5"
@@ -288,10 +247,6 @@ const Team = (props: Props) => {
               </div>
             ))}
           </div>
-
-          {/* -------------------------------- */}
-          {/* DUPLICATE SET */}
-          {/* -------------------------------- */}
 
           <div className="flex w-max shrink-0 items-center gap-5 pr-5">
             {teamData.map((data, index) => (
